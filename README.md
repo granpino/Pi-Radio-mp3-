@@ -50,7 +50,9 @@ and change the resolution at the bottom of the file to 640x480. Save, exit and r
     sudo reboot
 
 At this point the Pi should boot to the stretch desktop and the touchscreen working. Now install the Pi-radio files.
-
+    
+    sudo apt-get install mpc mpd
+    
     cd
 
     git clone https://github.com/granpino/Pi-Radio-mp3-.git
