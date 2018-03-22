@@ -75,7 +75,7 @@ or edit the file
 
     sudo nano ~/var/lib/mpd/playlists/playlist
 
-To add other mp3 files, transfer these to the mp3 folder and type 
+To add other mp3 files, transfer these to the Music folder and type 
 
     sudo ls -1 /home/pi/Music/*.mp3 > /var/lib/mpd/playlists/mp3.m3u
 
