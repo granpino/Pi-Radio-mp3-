@@ -19,6 +19,7 @@ green = 0, 255, 0
 
 #other
 subprocess.call("mpc random off", shell=True)
+subprocess.call("mpc volume 60", shell=True)
 shuffle = False
 
 _image = ['200x170.png','200x170b.png','200x170c.png','200x170d.png']
@@ -137,7 +138,7 @@ def refresh_menu_screen():
 
 	font=pygame.font.Font(None,50)
 	station_font=pygame.font.Font(None,40)
-        skin=pygame.image.load("/home/pi/pi-radio/skin.png")
+        skin=pygame.image.load("skin.png")
 	indicator_on=font.render("[       ]", 1, (blue))
         indicator_off=font.render("", 1, (white))
 	label2=font.render("Internet Radio", 1, (cyan))
@@ -205,7 +206,7 @@ def refresh_menu_screen():
 	network_status_label = font.render(network_status, 1, (status_font))
 	screen.blit(network_status_label, (330,150))
 	pygame.display.flip()
-	#refresh_menu_screen()
+
 
 def main():
         while 1:
