@@ -1,3 +1,9 @@
+#!/usr/bin/python
+# pi-radio rev. 1.0
+# This is to be used with a 3.5" HDMI touchscreen
+# Tested with the Raspberry pi 2 and raspbian stretch
+# The program must be run within the Lxterminal or the 
+# touchscreen will be upside down
 import sys, pygame
 from pygame.locals import *
 import time
@@ -18,12 +24,16 @@ red = 255, 0, 0
 green = 0, 255, 0
 
 #other
+os.system("mount /dev/sda1 /mnt/usbdrive") #setup for USB drive if used
 subprocess.call("mpc random off", shell=True)
-subprocess.call("mpc volume 60", shell=True)
+subprocess.call("mpc volume 50", shell=True)
+subprocess.call("mpc update ", shell=True)
 shuffle = False
 
-_image = ['200x170.png','200x170b.png','200x170c.png','200x170d.png']
-next_image = random.choice(_image)
+_image = ('200x170.png','200x170b.png','200x170c.png','200x170d.png')
+global album_img
+album_img = ('200x170d.png')
+
 
 #define function that checks for mouse location
 def on_click():
@@ -40,7 +50,7 @@ def on_click():
         if 320 <= click_pos[0] <= 473 and 410 <= click_pos[1] <460:
                 print "You pressed button stop"
                 button(2)
-	#now check to see if refreshed  was pressed
+	#now check to see if mp3 was pressed
         if 360 <= click_pos[0] <= 475 and 20 <= click_pos[1] <=73:
                 print "You pressed button mp3"
                 button(3)
@@ -106,7 +116,8 @@ def button(number):
 
 	if number == 5:
 		subprocess.call("mpc next ", shell=True)
-	        next_image = random.choice(_image)
+		global album_img
+	        album_img = random.choice(_image)
 		refresh_menu_screen()
 
 	if number == 6:
@@ -125,7 +136,8 @@ def button(number):
 
         if number == 3:
                 subprocess.call("mpc clear ", shell=True)
-		subprocess.call("mpc load mp3 ", shell=True)
+		subprocess.call("mpc update ", shell=True)
+		subprocess.call("mpc add /", shell=True) 
                 refresh_menu_screen()
 
 
@@ -143,18 +155,17 @@ def refresh_menu_screen():
         indicator_off=font.render("", 1, (white))
 	label2=font.render("Internet Radio", 1, (cyan))
 	#draw the main elements on the screen
-	image=pygame.image.load(next_image)
+	image=pygame.image.load(album_img)
         screen.blit(skin,(0,0))
         screen.blit(image,(25,90))
         #screen.blit(label,(520, 105))
-        screen.blit(label2,(250, 100))
-	pygame.draw.rect(screen, black, (447, 167, 178, 69),0)
-	pygame.draw.rect(screen, black, (70, 267, 545, 120),0)
-        screen.blit(time_label,(450, 165))
+        screen.blit(label2,(250, 95))
+	pygame.draw.rect(screen, black, (440, 167, 178, 69),0)
+	pygame.draw.rect(screen, black, (70, 272, 545, 115),0)
+        screen.blit(time_label,(443, 165))
 
 	##### display the station name and split it into 2 parts : 
-	lines = subprocess.check_output("mpc current", shell=True).split(":")
-
+	lines = subprocess.check_output("mpc current", shell=True).split("-")
 	if len(lines)==1:
 		line1 = lines[0]
 		line1 = line1[:-1]
@@ -164,7 +175,7 @@ def refresh_menu_screen():
 		line2 = lines[1]
 
 	line1 = line1[:38]
-	line2 = line2[:38]
+	line2 = line2[1:38]
 	line2 = line2[:-1]
 	#trap no station data
 	if line1 =="":
@@ -174,37 +185,42 @@ def refresh_menu_screen():
 	else:
 		station_status = "Playing"
 		status_font = green
+
 	station_name=station_font.render(line1, 1, (white))
 	additional_data=station_font.render(line2, 1, (white))
 	station_label=font.render(station_status, 1, (status_font))
-	screen.blit(station_label,(250,205)) #playing
+	screen.blit(station_label,(250,190)) #playing
 	screen.blit(station_name,(70,350))
-	screen.blit(additional_data,(70,280))
+	screen.blit(additional_data,(70,287))
+
+	 ##### display remaining time  : 
+        RemTime = subprocess.check_output("mpc -f %time%", shell=True).split("#")
+        if len(RemTime)==1:
+                Ln1 = RemTime[0]
+                Ln1 = Ln1[:-1]
+                Ln2 = "> "
+        else:
+                Ln1 = RemTime[0]
+                Ln2 = RemTime[1]
+
+        Ln1 = Ln1[1:29]
+        Ln2 = Ln2[:17]
+        rem_time=station_font.render(Ln2, 1, (cyan))
+        screen.blit(rem_time,(250,240))
+
 	######## add volume number
 	volume = subprocess.check_output("mpc volume", shell=True )
 	volume = volume[8:]
 	volume = volume[:-1]
 	volume_tag=font.render(volume, 1, (white))
-	screen.blit(volume_tag,(250,150))
-	####### check to see if the Radio is connected to the internet
-	IP = subprocess.check_output("hostname -I", shell=True )
-	IP=IP[:3]
-	if IP =="192":
-		network_status = "online"
-		status_font = green
-
-	else:
-		network_status = "offline"
-		status_font = red
-	###### check for random
+	screen.blit(volume_tag,(250,145))
+	####### shuffle the list
 	if shuffle == 1:
 		screen.blit(indicator_on,(517, 102))
 
 	else:
         	screen.blit(indicator_off,(517, 102))
 
-	network_status_label = font.render(network_status, 1, (status_font))
-	screen.blit(network_status_label, (330,150))
 	pygame.display.flip()
 
 
