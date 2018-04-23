@@ -85,11 +85,13 @@ It would be nice to sent the music to a bluetooth speaker. If you are using a Ra
 You will also need to edit the mpd.conf file to include the bluetooth speaker.
 
     bluetoothctl
-Copy the speaker mac address xx:xx:xx:xx:xx:xx
+Copy the speaker mac address xx:xx:xx:xx:xx:xx.
+
     exit
     sudo nano /etc/mpd.conf
 
-Look for the audio output and paste the mac address:
+Look for the audio output and paste the mac address
+
     audio_output {
            type            "alsa"
         name            "bluetooth-speaker "
@@ -97,6 +99,7 @@ Look for the audio output and paste the mac address:
         mixer_type      "software"
     }
 You can have more than one bluetooth device
+
     audio_output {
         type            "alsa"
         name            "headphone "
@@ -104,6 +107,7 @@ You can have more than one bluetooth device
         mixer_type      "software"
     }
 If you want to listen to the audio jack and bluetooth at the same time, then add a second audio output as;
+
     audio_output {
         type            "alsa"
         name            "hdmi audio jack"
