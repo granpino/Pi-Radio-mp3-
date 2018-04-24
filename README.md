@@ -78,6 +78,21 @@ or edit the file
 To add other mp3 files, transfer these to the Music folder and type 
 
     sudo ls -1 /home/pi/Music/*.mp3 > /var/lib/mpd/playlists/mp3.m3u
+
+THE mpd.conf FILE;
+
+The mpd.conf file needs to show the location of the mp3 files. If you put your mp3 files in the Music folder then open the mpd.conf file.
+
+    sudo nano /etc/mpd.conf
+
+and change the file location to
+
+    music_directory                        "/home/pi/Music"
+
+If you wish to put your mp3 files in a USB stick then change to
+
+    music_directory                       "/mnt/usbdrive"
+
 BLUETOOTH
 
 It would be nice to sent the music to a bluetooth speaker. If you are using a Raspberry pi 2, insert a bluetooth dongle int the USB slot. Go to the raspberry desktop and click on the bluetooth icon then add device. Select your bluetooth speaker and pair. Some speakers will require a password, sometimes 0000. You will need a mouse to righ-click on the speaker icon on the menu to connect.
