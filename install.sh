@@ -39,4 +39,5 @@ EOF
 sudo chmod 755 Piradio.desktop
 sudo mv Piradio.desktop /home/pi/Desktop
 
-
+#add virtual USB drive if used
+sudo mkdir /mnt/usbdrive
