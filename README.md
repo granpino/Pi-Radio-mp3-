@@ -35,7 +35,7 @@ After the upgrade you are ready for the installation. Now install the LCD driver
 
     git clone https://github.com/goodtft/LCD-show.git
 
-    chmod -R 755 LCD-show
+    sudo chmod -R 755 LCD-show
 
     cd LCD-show
 
@@ -57,7 +57,7 @@ At this point the Pi should boot to the stretch desktop and the touchscreen work
 
     git clone https://github.com/granpino/Pi-Radio-mp3-.git
 
-    chmod -R 755 Pi-Radio-mp3-
+    sudo chmod -R 755 Pi-Radio-mp3-
 
     cd Pi-Radio-mp3-
 
