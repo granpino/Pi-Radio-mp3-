@@ -26,8 +26,11 @@ green = 0, 255, 0
 #other
 os.system("mount /dev/sda1 /mnt/usbdrive") #setup for USB drive if used
 subprocess.call("mpc random off", shell=True)
-subprocess.call("mpc volume 50", shell=True)
+subprocess.call("mpc volume 60", shell=True)
 subprocess.call("mpc update ", shell=True)
+subprocess.call("mpc load playlist", shell=True)
+global mp3
+mp3 = 0
 shuffle = False
 
 _image = ('200x170.png','200x170b.png','200x170c.png','200x170d.png')
@@ -108,6 +111,8 @@ def button(number):
 	if number == 8:
 		subprocess.call("mpc clear ", shell=True)
 		subprocess.call("mpc load playlist ", shell=True)
+		global mp3
+		mp3 = 0
 		refresh_menu_screen() 
 
 	if number == 4:
@@ -138,6 +143,8 @@ def button(number):
                 subprocess.call("mpc clear ", shell=True)
 		subprocess.call("mpc update ", shell=True)
 		subprocess.call("mpc add /", shell=True) 
+		global mp3
+		mp3 = 1
                 refresh_menu_screen()
 
 
@@ -151,7 +158,7 @@ def refresh_menu_screen():
 	font=pygame.font.Font(None,50)
 	station_font=pygame.font.Font(None,40)
         skin=pygame.image.load("skin.png")
-	indicator_on=font.render("[       ]", 1, (blue))
+	indicator_on=font.render("[        ]", 1, (blue))
         indicator_off=font.render("", 1, (white))
 	label2=font.render("Internet Radio", 1, (cyan))
 	#draw the main elements on the screen
@@ -194,7 +201,7 @@ def refresh_menu_screen():
 	screen.blit(additional_data,(70,287))
 
 	 ##### display remaining time  : 
-        RemTime = subprocess.check_output("mpc -f %time%", shell=True).split("#")
+        RemTime = subprocess.check_output("mpc -f %time%", shell=True).split("\n")
         if len(RemTime)==1:
                 Ln1 = RemTime[0]
                 Ln1 = Ln1[:-1]
@@ -203,8 +210,8 @@ def refresh_menu_screen():
                 Ln1 = RemTime[0]
                 Ln2 = RemTime[1]
 
-        Ln1 = Ln1[1:29]
-        Ln2 = Ln2[:17]
+#        Ln1 = Ln1[1:19]
+        Ln2 = Ln2[10:]
         rem_time=station_font.render(Ln2, 1, (cyan))
         screen.blit(rem_time,(250,240))
 
@@ -216,10 +223,17 @@ def refresh_menu_screen():
 	screen.blit(volume_tag,(250,145))
 	####### shuffle the list
 	if shuffle == 1:
-		screen.blit(indicator_on,(517, 102))
+		screen.blit(indicator_on,(513, 102))
 
 	else:
-        	screen.blit(indicator_off,(517, 102))
+        	screen.blit(indicator_off,(513, 102))
+	####### light-up source button
+	if mp3 == 1:
+		screen.blit(indicator_on,(370, 22))
+		screen.blit(indicator_off,(258, 22))
+	else:
+		screen.blit(indicator_off,(370, 22))
+		screen.blit(indicator_on,(258,22))
 
 	pygame.display.flip()
 
