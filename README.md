@@ -39,7 +39,7 @@ After the upgrade you are ready for the installation. Now install the LCD driver
 
     cd LCD-show
 
-    sudo ./MPI3508_600_400-show
+    sudo ./MPI3508-show
 
 The resolution used with the pi-radio is 640x480, therefore you need change the config.txt.
 
