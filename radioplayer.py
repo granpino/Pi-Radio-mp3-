@@ -26,6 +26,7 @@ green = 0, 255, 0
 #other
 os.system("mount /dev/sda1 /mnt/usbdrive") #setup for USB drive if used
 subprocess.call("mpc random off", shell=True)
+subprocess.call("mpc clear", shell=True)
 subprocess.call("mpc volume 60", shell=True)
 subprocess.call("mpc update ", shell=True)
 subprocess.call("mpc load playlist", shell=True)
@@ -176,7 +177,7 @@ def refresh_menu_screen():
 	if len(lines)==1:
 		line1 = lines[0]
 		line1 = line1[:-1]
-		line2 = "No additional info: "
+		line2 = " No additional info: "
 	else:
 		line1 = lines[0]
 		line2 = lines[1]
